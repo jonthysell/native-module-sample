@@ -4,8 +4,15 @@
 module.exports = {
   dependency: {
     platforms: {
-      android: {
-        cmakeListsPath: 'generated/jni/CMakeLists.txt',
+      windows: {
+        sourceDir: 'windows',
+        solutionFile: 'NativeModuleSample.sln',
+        projects: [
+          {
+            projectFile: 'NativeModuleSample\\NativeModuleSample.vcxproj',
+            directDependency: true,
+          }
+        ],
       },
     },
   },

@@ -20,17 +20,8 @@
   "files": [
     "src",
     "lib",
-    "android",
-    "ios",
-    "cpp",
-    "*.podspec",
+    "windows",
     "react-native.config.json",
-    "!ios/build",
-    "!android/build",
-    "!android/gradle",
-    "!android/gradlew",
-    "!android/gradlew.bat",
-    "!android/local.properties",
     "!**/__tests__",
     "!**/__fixtures__",
     "!**/__mocks__",
@@ -38,17 +29,16 @@
   ],
   "scripts": {
     "example": "yarn workspace native-module-sample-example",
+    "example-old": "yarn workspace native-module-sample-example-old",
     "test": "jest",
     "typecheck": "tsc",
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
-    "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build lib",
     "prepare": "bob build",
-    "release": "release-it"
+    "codegen-windows": "react-native codegen-windows"
   },
   "keywords": [
     "react-native",
-    "ios",
-    "android"
+    "windows"
   ],
   "repository": {
     "type": "git",
@@ -64,15 +54,10 @@
     "registry": "https://registry.npmjs.org/"
   },
   "devDependencies": {
-    "@commitlint/config-conventional": "^17.0.2",
-    "@evilmartians/lefthook": "^1.5.0",
     "@react-native-community/cli": "15.0.0-alpha.2",
     "@react-native/eslint-config": "^0.73.1",
-    "@release-it/conventional-changelog": "^9.0.2",
     "@types/jest": "^29.5.5",
     "@types/react": "^18.2.44",
-    "commitlint": "^17.0.2",
-    "del-cli": "^5.1.0",
     "eslint": "^8.51.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-prettier": "^5.0.1",
@@ -81,8 +66,7 @@
     "react": "18.3.1",
     "react-native": "0.76.0",
     "react-native-builder-bob": "^0.31.0",
-    "release-it": "^17.10.0",
-    "turbo": "^1.10.7",
+    "react-native-windows": "0.76.0",
     "typescript": "^5.2.2"
   },
   "resolutions": {
@@ -90,40 +74,21 @@
   },
   "peerDependencies": {
     "react": "*",
-    "react-native": "*"
+    "react-native": "*",
+    "react-native-windows": "*"
   },
   "workspaces": [
-    "example"
+    "example",
+    "example-old"
   ],
   "packageManager": "yarn@3.6.1",
   "jest": {
     "preset": "react-native",
     "modulePathIgnorePatterns": [
       "<rootDir>/example/node_modules",
+      "<rootDir>/example-old/node_modules",
       "<rootDir>/lib/"
     ]
-  },
-  "commitlint": {
-    "extends": [
-      "@commitlint/config-conventional"
-    ]
-  },
-  "release-it": {
-    "git": {
-      "commitMessage": "chore: release ${version}",
-      "tagName": "v${version}"
-    },
-    "npm": {
-      "publish": true
-    },
-    "github": {
-      "release": true
-    },
-    "plugins": {
-      "@release-it/conventional-changelog": {
-        "preset": "angular"
-      }
-    }
   },
   "eslintConfig": {
     "root": true,
@@ -160,7 +125,6 @@
     "source": "src",
     "output": "lib",
     "targets": [
-      "codegen",
       [
         "commonjs",
         {
@@ -183,21 +147,26 @@
     ]
   },
   "codegenConfig": {
-    "name": "RNNativeModuleSampleSpec",
+    "name": "NativeModuleSampleSpec",
     "type": "all",
     "jsSrcsDir": "src",
-    "outputDir": {
-      "ios": "ios/generated",
-      "android": "android/generated"
-    },
-    "android": {
-      "javaPackageName": "com.nativemodulesample"
-    },
-    "includesGeneratedCode": true
+    "includesGeneratedCode": true,
+    "windows": {
+      "namespace": "NativeModuleSampleCodegen",
+      "outputDirectory": "windows/NativeModuleSample/codegen",
+      "separateDataTypes": true
+    }
   },
   "create-react-native-library": {
     "languages": "kotlin-objc",
     "type": "module-mixed",
     "version": "0.43.0"
+  },
+  "react-native-windows": {
+    "init-windows": {
+      "name": "NativeModuleSample",
+      "namespace": "NativeModuleSample",
+      "template": "cpp-lib"
+    }
   }
 }
